@@ -1,50 +1,54 @@
-// import React from "react";
-import { useState } from "react";
-// import "./App.css";
-import ImageUpload from "./myComponent";
-import OnClickMakeImageBig from "./myComponent/OnClickMakeImageBig";
-import DragDropImageUpload from "./myComponent/dragDrop";
+import { useEffect, useState, useCallback } from "react";
 import ImportImage from "./myComponent/importImage";
-import SingleUpload from "./myComponent/singleUpload";
+import GallarySlide from "./myComponent/gallarySlide";
 
 function App() {
   const [uploadedImage, setUploadedImage] = useState([]);
-  const fileToBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-      reader.readAsDataURL(file);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleFilesSelect = useCallback(async (e) => {
+    const files = Array.from(e.target.files);
+    const formData = new FormData();
+    files.forEach((file) => {
+      if (file.type.startsWith("image/")) {
+        formData.append("images", file);
+      } else {
+        alert("Please upload image files only.");
+      }
     });
-  const handleFileSelect = async (e) => {
-    const file = e.target.files[0];
-    if (file.type.startsWith("image/")) {
-      const base64Image = await fileToBase64(file);
-      console.log("base64Image", base64Image);
-      setUploadedImage(base64Image);
-    } else {
-      alert("Please upload an image file.");
+
+    try {
+      const response = await fetch("http://localhost:5500/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      setUploadedImage((prev) => [...prev, ...data.fileURLs]);
+    } catch (error) {
+      console.error("Error uploading images:", error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (uploadedImage.length) {
+      setSelectedImage(uploadedImage[0]);
+    }
+  }, [uploadedImage]);
 
   return (
-    <>
-      {/* multiple upload */}
-      {/* <ImageUpload /> */}
-      {/* drag drop */}
-      {/* <DragDropImageUpload /> */}
-      {/* single upload */}
-      {/* <SingleUpload /> */}
-      {/* oncoloce make image big
-       */}
-      {/* <OnClickMakeImageBig /> */}
+    <div style={{ width: "100vw", height: "100vh", boxSizing: "border-box" }}>
+      <GallarySlide
+        selectedImage={selectedImage}
+        setSelectedImage={setSelectedImage}
+      />
+
       <ImportImage
-        handleClick={handleFileSelect}
+        handleClick={handleFilesSelect}
         type="icon"
+        setSelectedImage={setSelectedImage}
         data={uploadedImage}
       />
-      {/* <input type="file" name="" id="" onChange={handleFileUpload} /> */}
-    </>
+    </div>
   );
 }
 
