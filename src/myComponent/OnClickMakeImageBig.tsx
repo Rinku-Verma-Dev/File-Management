@@ -1,8 +1,8 @@
-
+import React, { CSSProperties } from "react";
 import { useState } from "react";
 
 const OnClickMakeImageBig = () => {
-  const [uploadedImages, setUploadedImages] = useState([]);
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const fileToBase64 = (file) =>
@@ -13,18 +13,20 @@ const OnClickMakeImageBig = () => {
       reader.readAsDataURL(file);
     });
 
-  const handleFilesSelect = async (e) => {
+  const handleFilesSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    const images = [];
-    for (let i = 0; i < files.length; i++) {
-      if (files[i].type.startsWith("image/")) {
-        const base64Image = await fileToBase64(files[i]);
-        images.push(base64Image);
-      } else {
-        alert("Please upload image files only.");
+    if (files) {
+      const images: string[] = [];
+      for (let i = 0; i < files.length; i++) {
+        if (files[i].type.startsWith("image/")) {
+          const base64Image = await fileToBase64(files[i]);
+          images.push(base64Image as string);
+        } else {
+          alert("Please upload image files only.");
+        }
       }
+      setUploadedImages(images);
     }
-    setUploadedImages(images);
   };
 
   const handleImageClick = (image) => {
@@ -37,21 +39,21 @@ const OnClickMakeImageBig = () => {
     }
   };
 
-  const containerStyle = {
+  const containerStyle: CSSProperties = {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
   };
 
-  const imgStyle = {
+  const imgStyle: CSSProperties = {
     width: "300px",
     height: "200px",
     objectFit: "contain",
     margin: "0.5rem",
   };
 
-  const overlayStyle = {
+  const overlayStyle: CSSProperties = {
     position: "fixed",
     top: 0,
     left: 0,
@@ -64,7 +66,7 @@ const OnClickMakeImageBig = () => {
     zIndex: 1000,
   };
 
-  const largeImgStyle = {
+  const largeImgStyle: CSSProperties = {
     maxWidth: "90%",
     maxHeight: "90%",
     objectFit: "contain",

@@ -1,7 +1,8 @@
+import React from "react";
 import { useState } from "react";
 
 const DragDropImageUpload = () => {
-  const [uploadedImage, setUploadedImage] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const handleDragOver = (e) => {
     e.preventDefault();
   };

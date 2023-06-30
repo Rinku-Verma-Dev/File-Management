@@ -2,23 +2,38 @@
 import { useCallback } from "react";
 import AddAPhotoTwoToneIcon from "@mui/icons-material/AddAPhotoTwoTone";
 import BoxCard from "./boxCard";
+import React from "react";
 
 function ImportImage({
-  handleClick = () => {},
+  handleClick,
   type = "single",
   data = [],
   setSelectedImage,
+}: {
+  handleClick: (e: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
+  type: String;
+  setSelectedImage: React.Dispatch<
+    React.SetStateAction<{
+      index: number;
+      src: String;
+    } | null>
+  >;
+  data: String[];
 }) {
   const handleImportClick = useCallback(() => {
-    const input = document.getElementById("import-image");
-    input.click();
+    const input: HTMLElement | null = document.getElementById("import-image");
+    input?.click();
   }, []);
-
+  console.log("ImportImage", { data });
   return (
     <div style={{ height: "40vh", boxSizing: "border-box" }}>
       <div style={{ display: "flex" }}>
         {data.map((item, i) => (
-          <BoxCard data={item} key={i} setSelectedImage={setSelectedImage}/>
+          <BoxCard
+            data={{ index: i, src: item }}
+            key={i}
+            setSelectedImage={setSelectedImage}
+          />
         ))}
         {type === "icon" ? (
           <BoxCard>

@@ -1,12 +1,23 @@
-// eslint-disable-next-line react/prop-types
-function BoxCard({ children, data, setSelectedImage }) {
+import React from "react";
+
+function BoxCard({
+  children,
+  data,
+  setSelectedImage,
+}: {
+  children?: any;
+  data?: any;
+  setSelectedImage?: any;
+}): React.JSX.Element {
   console.log("BoxCard>>", { data });
   return (
     <div
       style={{
         overflow: "hidden",
+        minWidth: "80px",
         width: "7vw",
         height: "12vh",
+        minHeight: "70px",
         borderRadius: "15%",
         backgroundColor: "lightgrey",
         display: "flex",
@@ -20,7 +31,7 @@ function BoxCard({ children, data, setSelectedImage }) {
         children
       ) : (
         <div onClick={() => setSelectedImage(data)}>
-          <img src={data} style={{ width: "7vw", height: "12vh" }} />
+          <img src={data.src} style={{ width: "7vw", height: "12vh" }} />
         </div>
       )}
     </div>
