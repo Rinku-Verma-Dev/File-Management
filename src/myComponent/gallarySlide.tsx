@@ -1,8 +1,25 @@
 /* eslint-disable react/prop-types */
 import PhotoTwoToneIcon from "@mui/icons-material/PhotoTwoTone";
+import React from "react";
 import { useEffect } from "react";
 
-function GallarySlide({ selectedImage = null }) {
+function GallarySlide({
+  selectedImage = null,
+  setSelectedImage,
+  uploadedImage,
+}: {
+  selectedImage: {
+    index: number;
+    src: string;
+  } | null;
+  setSelectedImage: React.Dispatch<
+    React.SetStateAction<{
+      index: number;
+      src: string;
+    } | null>
+  >;
+  uploadedImage: string[];
+}) {
   useEffect(() => {
     console.log("selectedImage", selectedImage);
   }, [selectedImage]);
@@ -21,13 +38,14 @@ function GallarySlide({ selectedImage = null }) {
           height: "60vh",
           boxSizing: "border-box",
           maxHeight: "60vh",
+          minWidth: "320px",
         }}
       >
         {selectedImage ? (
           <>
             <div>
               <img
-                src={selectedImage}
+                src={selectedImage.src}
                 alt="image"
                 style={{ width: "100%", maxHeight: "60vh" }}
               />

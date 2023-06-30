@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { CSSProperties, useState } from "react";
 import SlideshowGallery from "./slideShow";
+import React from "react";
 
 const ImageUpload = () => {
   const [uploadedImages, setUploadedImages] = useState([]);
@@ -13,26 +14,28 @@ const ImageUpload = () => {
   //     reader.readAsDataURL(file);
   //   });
 
-  const handleFilesSelect = async (e) => {
-    const files = Array.from(e.target.files);
-    const formData = new FormData();
-    files.forEach((file) => {
-      if (file.type.startsWith("image/")) {
-        formData.append("images", file);
-      } else {
-        alert("Please upload image files only.");
-      }
-    });
-
-    try {
-      const response = await fetch("http://localhost:5500/upload", {
-        method: "POST",
-        body: formData,
+  const handleFilesSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      const formData = new FormData();
+      files.forEach((file) => {
+        if (file.type.startsWith("image/")) {
+          formData.append("images", file);
+        } else {
+          alert("Please upload image files only.");
+        }
       });
-      const data = await response.json();
-      setUploadedImages(data.fileURLs);
-    } catch (error) {
-      console.error("Error uploading images:", error);
+
+      try {
+        const response = await fetch("http://localhost:5500/upload", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await response.json();
+        setUploadedImages(data.fileURLs);
+      } catch (error) {
+        console.error("Error uploading images:", error);
+      }
     }
   };
   // const handleFilesSelect = async (e) => {
@@ -59,7 +62,7 @@ const ImageUpload = () => {
     }
   };
 
-  const containerStyle = {
+  const containerStyle: CSSProperties = {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -73,7 +76,7 @@ const ImageUpload = () => {
   //   margin: "0.5rem",
   // };
 
-  const overlayStyle = {
+  const overlayStyle: CSSProperties = {
     position: "fixed",
     top: 0,
     left: 0,
@@ -86,7 +89,7 @@ const ImageUpload = () => {
     zIndex: 1000,
   };
 
-  const largeImgStyle = {
+  const largeImgStyle: CSSProperties = {
     maxWidth: "90%",
     maxHeight: "90%",
     objectFit: "contain",

@@ -1,7 +1,8 @@
-import { useState } from "react";
+import React, { CSSProperties } from "react";
+import { SetStateAction, useState } from "react";
 
 const SingleUpload = () => {
-  const [uploadedImage, setUploadedImage] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
 
   const fileToBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -15,20 +16,21 @@ const SingleUpload = () => {
     const file = e.target.files[0];
     if (file.type.startsWith("image/")) {
       const base64Image = await fileToBase64(file);
-      setUploadedImage(base64Image);
+
+      base64Image && setUploadedImage(base64Image as string);
     } else {
       alert("Please upload an image file.");
     }
   };
 
-  const containerStyle = {
+  const containerStyle: CSSProperties = {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
   };
 
-  const imgStyle = {
+  const imgStyle: CSSProperties = {
     width: "300px",
     height: "200px",
     objectFit: "contain",

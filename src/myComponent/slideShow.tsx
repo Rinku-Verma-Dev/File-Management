@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import "./SlideshowGallery.css";
+import React from "react";
 
 const SlideshowGallery = ({ uploadedImages }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
